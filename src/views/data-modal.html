@@ -1,0 +1,10 @@
+<div class="data-modal">
+  <h2>Data</h2>
+  <i ng-click="close()" class="fa fa-close close-modal"></i>
+  <ul class="no-bullet">
+    <li class="repeat-animation" ng-repeat="(key, value) in dataPoint">
+      <strong>{{key}}:</strong>
+      <span>{{value}}</span>
+    </li>
+  </ul>
+</div>

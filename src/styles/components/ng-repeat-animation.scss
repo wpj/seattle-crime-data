@@ -1,0 +1,35 @@
+.repeat-animation.ng-enter,
+.repeat-animation.ng-leave,
+.repeat-animation.ng-move {
+  @include transition(0.2s linear opacity);
+  @include transition(0.4s $ease-out-back transform);
+}
+
+.repeat-animation.ng-enter-stagger,
+.repeat-animation.ng-leave-stagger,
+.repeat-animation.ng-move-stagger {
+  @include transition-delay(20ms);
+  @include transition-duration(0);
+}
+
+.repeat-animation.ng-enter,
+.repeat-animation.ng-move {
+  opacity:0;
+  @include transform(translateX(-100%));
+}
+
+.repeat-animation.ng-enter.ng-enter-active,
+.repeat-animation.ng-move.ng-move-active {
+  opacity:1;
+  @include transform(translateX(0%));
+}
+
+.repeat-animation.ng-leave {
+  opacity:1;
+  @include transform(translateX(0%));
+}
+
+.repeat-animation.ng-leave.ng-leave-active {
+  opacity:0;
+  @include transform(translateX(-100%));
+}

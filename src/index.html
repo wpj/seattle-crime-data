@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Coding Exercise | Wyatt Johnston</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, height=device-height">
+
+    <link rel="stylesheet" href="css/application.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="js/bundle.js"></script>
+  </head>
+  <body ng-app="codingExercise" ng-controller="MainCtrl">
+
+    <top-bar>
+      <ul class="title-area">
+        <li class="name">
+          <h1>
+            <a href="#">
+              Coding Exercise
+            </a>
+          </h1>
+        </li>
+        <li toggle-top-bar class="menu-icon"><a href="#">menu</a></li>
+      </ul>
+
+      <top-bar-section>
+        <ul class="right">
+          <li class="divider"></li>
+          <li has-dropdown>
+            <a>Map options</a>
+            <ul top-bar-dropdown>
+              <li>
+                <button
+                  ng-click="disableClustering()"
+                  class="button tiny"
+                  ng-class="{
+                    alert: !config.disableClustering,
+                    success: config.disableClustering
+                  }">
+                  <span ng-hide="config.disableClustering">Disable</span>
+                  <span ng-show="config.disableClustering">Enable</span>
+                  clustering
+                </button>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </top-bar-section>
+    </top-bar>
+
+    <collision-map center="center" options="config"></collision-map>
+  </body>
+</html>
