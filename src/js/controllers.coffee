@@ -14,6 +14,10 @@ module.exports = angular.module('app.controllers', [])
     $scope.config.displayMode = mode
 ]
 
+.controller 'MapCtrl', ['$scope', ($scope) ->
+
+]
+
 .controller 'DataModalCtrl',
   ['$scope', 'dataPoint', '$modalInstance',
   ($scope, dataPoint, $modalInstance) ->
@@ -21,4 +25,8 @@ module.exports = angular.module('app.controllers', [])
 
     $scope.close = ->
       $modalInstance.dismiss 'cancel'
+]
+
+.controller 'ChartsCtrl', ['$scope', ($scope) ->
+
 ]

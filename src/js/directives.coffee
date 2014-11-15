@@ -4,7 +4,7 @@ module.exports = angular.module('app.directives', [])
 
 .directive 'collisionMap', ['Socrata', '$modal', 'mapStats', (Socrata, $modal, mapStats) ->
   restrict: 'E'
-  templateUrl: 'collision-map.html'
+  template: '<div class="map-container"></div>'
   # replace: true
   scope:
     center: '='
