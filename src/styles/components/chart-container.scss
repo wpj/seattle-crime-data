@@ -1,14 +1,17 @@
+.chart-header {
+  text-align: center;
+}
+
 .chart-container {
   svg {
     display: block;
     margin: 0 auto;
-    width: 60%;
-  }
-
-  svg text {
+    width: 90%;
     font-family: 'Open Sans';
     font-size: 1em;
-    fill: #ecf0f1;
-    // pointer-events: none;
+    text {
+      // fill: #ecf0f1;
+      pointer-events: none;
+    }
   }
 }

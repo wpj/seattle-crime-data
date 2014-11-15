@@ -1,47 +1,39 @@
 module.exports = angular.module('app.controllers', [])
 
 .controller 'MainCtrl',
-['$scope', 'mapStats', 'dataCache', 'Socrata',
-($scope, mapStats, dataCache, Socrata) ->
-
-  ###
-  map config
-  ###
-  $scope.center = [47.595312, -122.331606]
+['$scope', 'dataCache', 'Socrata',
+($scope, dataCache, Socrata) ->
 
   $scope.config =
     disableClustering: false
     displayMode: 'markers'
-
-  $scope.crimeData = []
 
   $scope.disableClustering = ->
     $scope.config.disableClustering = not $scope.config.disableClustering
 
   $scope.setMode = (mode) ->
     $scope.config.displayMode = mode
+]
+
+.controller 'MapCtrl',
+['$scope', 'dataCache', 'Socrata',
+($scope, dataCache, Socrata) ->
+  ###
+  map config
+  ###
+  $scope.center = [47.595312, -122.331606]
+
+  $scope.crimeData = []
 
   ###
   get, parse, and cache crime data
   ###
-  Socrata.getData()
-    .then (response) ->
-      crimes = for record in response.data
-        do (record) ->
-          if coords = record.incident_location
-            mapStats.compareDistance [parseFloat(coords.latitude), parseFloat(coords.longitude)]
-            mapStats.extractCrimeTypes record.event_clearance_group
-            record
-
-      dataCache.set crimes
-      $scope.crimeData = crimes
-    
-    .catch (error) ->
-      console.error error
-]
-
-.controller 'MapCtrl', ['$scope', ($scope) ->
-
+  if dataCache.isCached()
+    $scope.crimeData = dataCache.get()
+  else
+    Socrata.getData()
+      .then (response) -> $scope.crimeData = response
+      .catch (error) -> console.error error
 ]
 
 .controller 'DataModalCtrl',
@@ -53,7 +45,19 @@ module.exports = angular.module('app.controllers', [])
       $modalInstance.dismiss 'cancel'
 ]
 
-.controller 'ChartsCtrl', ['$scope', 'mapStats', ($scope, mapStats) ->
-  data = mapStats.show()
-  $scope.distanceData = data.distances
+.controller 'ChartsCtrl',
+['$scope', 'mapStats', 'dataCache', 'Socrata',
+($scope, mapStats, dataCache, Socrata) ->
+  if dataCache.isCached()
+    data = mapStats.show()
+    $scope.distanceData = data.distances
+    $scope.crimeData = data.crimeTypes
+  else
+    Socrata.getData()
+      .then ->
+        data = mapStats.show()
+        $scope.distanceData = data.distances
+        $scope.crimeData = data.crimeTypes
+      .catch (error) ->
+        console.error error
 ]

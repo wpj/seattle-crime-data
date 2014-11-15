@@ -37,6 +37,10 @@ gulp.task('js', function() {
     .transform(coffeeify)
     .transform(debowerify)
     .bundle()
+    .on('error', function(err) {
+      console.log(err.message);
+      this.end()
+    })
     .pipe(source('browserify-bundle.js'))
     .pipe(buffer());
 
