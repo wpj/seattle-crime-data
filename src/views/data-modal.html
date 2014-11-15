@@ -1,10 +1,14 @@
 <div class="data-modal">
-  <h2>Data</h2>
+  <h2>Crime Information</h2>
   <i ng-click="close()" class="fa fa-close close-modal"></i>
   <ul class="no-bullet">
-    <li class="repeat-animation" ng-repeat="(key, value) in dataPoint">
-      <strong>{{key}}:</strong>
-      <span>{{value}}</span>
+    <li>
+      <strong>Date:</strong>
+      <span>{{dataPoint.at_scene_time}}</span>
+    </li>
+    <li>
+      <strong>Type:</strong>
+      <span>{{dataPoint.event_clearance_group}}</span>
     </li>
   </ul>
 </div>
