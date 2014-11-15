@@ -241,3 +241,8 @@ module.exports = angular.module('app.directives', [])
       drawChart() if scope.data
 
 ]
+
+.directive 'preventDefault', ->
+  (scope, elem, attrs) ->
+    elem.on 'click', (e) ->
+      e.preventDefault()
