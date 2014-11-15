@@ -1,6 +1,9 @@
 # third party modules
 angularAnimate       = require 'angular-animate'
-angularFoundation    = require 'angular-foundation'
+angularFoundation    = require './../../bower_components/angular-foundation/mm-foundation'
+foundationTemplates  = require './../../bower_components/angular-foundation/mm-foundation-tpls'
+# angularFoundation    = require 'mm-foundation'
+# foundationTemplates  = require 'mm-foundation-tpls'
 uiRouter             = require 'angular-ui-router'
 
 # app modules
