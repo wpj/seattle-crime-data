@@ -2,7 +2,7 @@ module.exports = angular.module('app.directives', [])
 
 module.exports = angular.module('app.directives', [])
 
-.directive 'collisionMap', ['Socrata', '$modal', (Socrata, $modal) ->
+.directive 'collisionMap', ['Socrata', '$modal', '$timeout', (Socrata, $modal, $timeout) ->
   restrict: 'E'
   templateUrl: 'collision-map.html'
   # replace: true
@@ -17,26 +17,39 @@ module.exports = angular.module('app.directives', [])
     map = L.map elem[0]
     map.setView scope.center, 14
 
+    # base tile layer
     L.tileLayer 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     .addTo(map)
 
+    # heatmap layer
+    heatLayer = L.heatLayer([],
+      maxZoom: 15
+      radius: 15
+      blur: 25
+    )
+
+    ###
+    marker layers
+    ###
+
     clusterLayer = new L.MarkerClusterGroup(disableClusteringAtZoom: 15)
     markersLayer = L.layerGroup()
 
-
-    setMarkers = ->
+    setLayers = ->
       Socrata.getData()
         .then (response) ->
           console.log response
           records = response.data
-          for record in records
+          heatCoords = for record in records
             do (record) ->
               if coords = record.incident_location
-                marker = L.marker([coords.latitude, coords.longitude])
+                c = [parseFloat(coords.latitude), parseFloat(coords.longitude)]
+                marker = L.marker(c)
 
                 marker.addTo clusterLayer
                 marker.addTo markersLayer
+                heatLayer.addLatLng c
 
                 marker.on 'click', (e) ->
                   $modal.open
@@ -45,7 +58,6 @@ module.exports = angular.module('app.directives', [])
                     resolve:
                       dataPoint: -> record
 
-          # map.addLayer clusterLayer
         .catch (error) ->
           console.log error
 
@@ -64,5 +76,15 @@ module.exports = angular.module('app.directives', [])
         map.removeLayer(markersLayer)
         map.addLayer(clusterLayer)
 
-    setMarkers()
+    scope.$watch 'options.displayMode', (newVal, oldVal) ->
+      if newVal is 'heat'
+        map.removeLayer clusterLayer
+        map.removeLayer markersLayer
+        map.addLayer heatLayer
+      else
+        scope.options.disableClustering = false
+        map.removeLayer heatLayer
+        map.addLayer clusterLayer
+
+    setLayers()
 ]

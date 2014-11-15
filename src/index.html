@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Coding Exercise | Wyatt Johnston</title>
+    <title>CenturyLink Field Crime Map</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, height=device-height">
 
     <link rel="stylesheet" href="css/application.css">
@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-heat/v0.1.0/leaflet-heat.js'></script>
     <script src="js/bundle.js"></script>
   </head>
   <body ng-app="codingExercise" ng-controller="MainCtrl">
@@ -17,13 +18,9 @@
     <top-bar>
       <ul class="title-area">
         <li class="name">
-          <h1>
-            <a href="#">
-              Coding Exercise
-            </a>
-          </h1>
+          <h1><a href="#">CenturyLink Field Crime Map</a></h1>
         </li>
-        <li toggle-top-bar class="menu-icon"><a href="#">menu</a></li>
+        <li toggle-top-bar class="menu-icon"><a href="#">Menu</a></li>
       </ul>
 
       <top-bar-section>
@@ -32,8 +29,18 @@
           <li has-dropdown>
             <a>Map options</a>
             <ul top-bar-dropdown>
+              <li ng-if="config.displayMode==='markers'">
+                <button ng-click="setMode('heat')" class="button tiny">
+                  Show heatmap
+                </button>
+              </li>
+              <li ng-if="config.displayMode==='heat'">
+                <button ng-click="setMode('markers')" class="button tiny">
+                  Show markers
+                </button>
+              </li>
               <li>
-                <button
+                <button ng-show="config.displayMode === 'markers'"
                   ng-click="disableClustering()"
                   class="button tiny"
                   ng-class="{

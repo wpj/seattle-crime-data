@@ -5,9 +5,13 @@ module.exports = angular.module('app.controllers', [])
 
   $scope.config =
     disableClustering: false
+    displayMode: 'markers'
 
   $scope.disableClustering = ->
     $scope.config.disableClustering = not $scope.config.disableClustering
+
+  $scope.setMode = (mode) ->
+    $scope.config.displayMode = mode
 ]
 
 .controller 'DataModalCtrl',
