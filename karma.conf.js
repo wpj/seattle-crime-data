@@ -7,17 +7,22 @@ module.exports = function(config) {
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
 
+    browserify: {
+      debug: true,
+      transform: ['coffeeify', 'debowerify'],
+      extensions: ['.js', '.coffee']
+    },
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['browserify', 'jasmine'],
 
 
     // list of files / patterns to load in the browser
     files: [
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
-      'src/**/*.coffee',
+      'src/**/services.coffee',
       'test/**/*.spec.coffee'
     ],
 
@@ -31,7 +36,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/**/*.coffee': ['coffee'],
+      'src/**/*.coffee': ['browserify'],
       'test/**/*.coffee': ['coffee']
     },
 
