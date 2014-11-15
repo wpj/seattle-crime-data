@@ -18,6 +18,41 @@ module.exports = angular.module('app.services', [])
       params: query
 ]
 
+.factory 'mapStats', ->
+  within =
+    quarterMile: 0
+    halfMile: 0
+    threeQuarterMile: 0
+    mile: 0
+
+  crimeTypes = {}
+
+  stadiumCoords = L.latLng [47.595312, -122.331606]
+
+  compareDistance = (coords) ->
+    distance = stadiumCoords.distanceTo(coords)
+
+    if distance < 402
+      within.quarterMile++
+    else if distance < 804
+      within.halfMile++
+    else if distance < 1207
+      within.threeQuarterMile++
+    else
+      within.mile++
+
+  extractCrimeTypes = (crime) ->
+    if crime of crimeTypes
+      crimeTypes[crime]++
+    else
+      crimeTypes[crime] = 1
+
+  compareDistance: compareDistance
+  extractCrimeTypes: extractCrimeTypes
+  show: ->
+    distances: within
+    crimeTypes: crimeTypes
+
 .factory 'moment', ->
   moment = require 'moment'
 

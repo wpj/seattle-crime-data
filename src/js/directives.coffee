@@ -2,7 +2,7 @@ module.exports = angular.module('app.directives', [])
 
 module.exports = angular.module('app.directives', [])
 
-.directive 'collisionMap', ['Socrata', '$modal', '$timeout', (Socrata, $modal, $timeout) ->
+.directive 'collisionMap', ['Socrata', '$modal', 'mapStats', (Socrata, $modal, mapStats) ->
   restrict: 'E'
   templateUrl: 'collision-map.html'
   # replace: true
@@ -39,7 +39,6 @@ module.exports = angular.module('app.directives', [])
     setLayers = ->
       Socrata.getData()
         .then (response) ->
-          console.log response
           records = response.data
           heatCoords = for record in records
             do (record) ->
@@ -57,6 +56,9 @@ module.exports = angular.module('app.directives', [])
                     controller: 'DataModalCtrl'
                     resolve:
                       dataPoint: -> record
+
+                mapStats.compareDistance c
+                mapStats.extractCrimeTypes record.event_clearance_group
 
         .catch (error) ->
           console.log error
