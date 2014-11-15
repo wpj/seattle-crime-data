@@ -14,7 +14,6 @@ module.exports = angular.module('app.services', [])
     $where: "at_scene_time>'#{oneMonthAgo}' AND within_circle(incident_location,#{stadiumCoords.lat},#{stadiumCoords.lng},#{mileInMeters})"
 
   getData: ->
-    console.log 'getting data'
     $http.get "http://data.seattle.gov/resource/3k2p-39jp.json",
       params: query
     .then (response) ->

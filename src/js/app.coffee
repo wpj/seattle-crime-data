@@ -34,5 +34,9 @@ module.exports = angular.module('codingExercise',
         templateUrl: 'charts.html'
         controller: 'ChartsCtrl'
 
+      .state 'about',
+        url: '/about'
+        templateUrl: 'about.html'
+
     $urlRouterProvider.otherwise '/'
 ]
