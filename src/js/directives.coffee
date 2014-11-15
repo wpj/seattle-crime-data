@@ -90,3 +90,59 @@ module.exports = angular.module('app.directives', [])
 
     setLayers()
 ]
+
+.directive 'pieChart', ['d3', (d3) ->
+  restrict: 'E'
+  template: '<div id="pie-chart" class="chart-container"></div>'
+  scope:
+    data: '='
+  link: (scope, elem, attrs) ->
+    config =
+      w: 500
+      h: 500
+
+    pie = d3.layout.pie()
+
+    outerRadius = config.w / 2
+    innerRadius = 0
+
+    arc = d3.svg.arc()
+          .innerRadius(innerRadius)
+          .outerRadius(outerRadius)
+
+    color = d3.scale.category10()
+
+    # 
+    # draw svg on DOM
+    # 
+    dataset = d3.values scope.data
+
+    svg = d3.select '#pie-chart'
+          .append 'svg'
+          .attr 'width', config.w
+          .attr 'height', config.h
+          .attr 'viewBox', '0,0,500,500'
+          .attr 'preserveAspectRatio', 'xMinYMin meet'
+
+
+    # 
+    # draw pie chart wedges
+    # 
+    arcs = svg.selectAll 'g.arc'
+            .data pie(dataset)
+            .enter()
+            .append 'g'
+            .attr 'class', 'arc'
+            .attr 'transform', "translate(#{outerRadius}, #{outerRadius})"
+
+    arcs.append 'path'
+      .attr 'fill', (d, i) ->
+        console.log "#{i}:", d
+        color(i)
+      .attr 'd', arc
+
+    arcs.append 'text'
+      .attr 'transform', (d) -> "translate(#{arc.centroid(d)})"
+      .attr 'text-anchor', 'middle'
+      .text (d) -> d.value
+]

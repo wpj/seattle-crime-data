@@ -27,6 +27,7 @@ module.exports = angular.module('app.controllers', [])
       $modalInstance.dismiss 'cancel'
 ]
 
-.controller 'ChartsCtrl', ['$scope', ($scope) ->
-
+.controller 'ChartsCtrl', ['$scope', 'mapStats', ($scope, mapStats) ->
+  data = mapStats.show()
+  $scope.distanceData = data.distances
 ]

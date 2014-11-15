@@ -1,0 +1,14 @@
+.chart-container {
+  svg {
+    display: block;
+    margin: 0 auto;
+    width: 60%;
+  }
+
+  svg text {
+    font-family: 'Open Sans';
+    font-size: 1em;
+    fill: #ecf0f1;
+    // pointer-events: none;
+  }
+}
