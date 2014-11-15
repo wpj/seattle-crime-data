@@ -2,13 +2,14 @@ module.exports = angular.module('app.directives', [])
 
 module.exports = angular.module('app.directives', [])
 
-.directive 'collisionMap', ['Socrata', '$modal', 'mapStats', (Socrata, $modal, mapStats) ->
+.directive 'crimeMap', ['$modal', ($modal) ->
   restrict: 'E'
   template: '<div class="map-container"></div>'
   # replace: true
   scope:
     center: '='
     options: '='
+    crimeData: '='
   link: (scope, elem, attrs) ->
 
     ###
@@ -36,32 +37,23 @@ module.exports = angular.module('app.directives', [])
     clusterLayer = new L.MarkerClusterGroup(disableClusteringAtZoom: 15)
     markersLayer = L.layerGroup()
 
-    setLayers = ->
-      Socrata.getData()
-        .then (response) ->
-          records = response.data
-          heatCoords = for record in records
-            do (record) ->
-              if coords = record.incident_location
-                c = [parseFloat(coords.latitude), parseFloat(coords.longitude)]
-                marker = L.marker(c)
+    setLayers = (records) ->
+      for record in records
+        do (record) ->
+          if coords = record.incident_location
+            c = [parseFloat(coords.latitude), parseFloat(coords.longitude)]
+            marker = L.marker(c)
 
-                marker.addTo clusterLayer
-                marker.addTo markersLayer
-                heatLayer.addLatLng c
+            marker.addTo clusterLayer
+            marker.addTo markersLayer
+            heatLayer.addLatLng c
 
-                marker.on 'click', (e) ->
-                  $modal.open
-                    templateUrl: 'data-modal.html'
-                    controller: 'DataModalCtrl'
-                    resolve:
-                      dataPoint: -> record
-
-                mapStats.compareDistance c
-                mapStats.extractCrimeTypes record.event_clearance_group
-
-        .catch (error) ->
-          console.log error
+            marker.on 'click', (e) ->
+              $modal.open
+                templateUrl: 'data-modal.html'
+                controller: 'DataModalCtrl'
+                resolve:
+                  dataPoint: -> record
 
     ###
     event listeners, $watches, view updates
@@ -69,6 +61,9 @@ module.exports = angular.module('app.directives', [])
 
     scope.$watch 'center', ->
       map.setView scope.center
+
+    scope.$watch 'crimeData', ->
+      setLayers(scope.crimeData) if scope.crimeData
 
     scope.$watch 'options.disableClustering', (newVal, oldVal) ->
       if newVal
@@ -87,8 +82,6 @@ module.exports = angular.module('app.directives', [])
         scope.options.disableClustering = false
         map.removeLayer heatLayer
         map.addLayer clusterLayer
-
-    setLayers()
 ]
 
 .directive 'pieChart', ['d3', (d3) ->
@@ -136,9 +129,7 @@ module.exports = angular.module('app.directives', [])
             .attr 'transform', "translate(#{outerRadius}, #{outerRadius})"
 
     arcs.append 'path'
-      .attr 'fill', (d, i) ->
-        console.log "#{i}:", d
-        color(i)
+      .attr 'fill', (d, i) -> color(i)
       .attr 'd', arc
 
     arcs.append 'text'

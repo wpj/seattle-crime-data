@@ -18,6 +18,11 @@ module.exports = angular.module('app.services', [])
       params: query
 ]
 
+.factory 'dataCache', ->
+  cache = null
+  set: (newCache) -> cache = newCache
+  get: -> cache
+
 .factory 'mapStats', ->
   within =
     quarterMile: 0
