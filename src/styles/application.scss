@@ -16,3 +16,13 @@
 body {
   font-family: 'Open Sans';
 }
+
+.top-bar-section ul {
+  position: relative;
+  z-index: 100;
+}
+
+.leaflet-control-container {
+  position: relative;
+  z-index: 90;
+}
